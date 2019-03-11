@@ -47,6 +47,47 @@ ffmpeg -i file.wav -f segment -segment_time 30 -c copy parts/out%09d.wav
 plackup -MPlack::App::Directory -e 'Plack::App::Directory->new(root=>".");' -p 2375
 ```
 
+## [Harvard].wav (from 1965 revised list of phonetically balanced sentences)
+
+_Actual text_
+
+The stale smell of old beer lingers. It takes heat to bring out the odor. A
+cold dip restores health and zest. A salt pickle tastes fine with ham. Tacos al
+pastor are my favourite. A zestful food is the hot-cross bun.
+
+_Pocket sphinx_
+
+they'll smell of old we're lingers it takes heat to bring out the odor called
+it restores health and zest case all the colt is fine with him couples all
+pastore my favorite is as full food is the hot cross mon
+
+_Google speech recognition_
+
+the stale smell of old beer lingers it takes heat to bring out the odor a cold
+dip restores health and zest a salt pickle taste fine with ham tacos al Pastore
+are my favorite a zestful food is be hot cross bun
+
+_Google cloud speech_
+
+the stale smell of old beer lingers it takes heat to bring out the odor a cold
+dip restores health and zest a salt pickle taste fine with ham tacos al Pastore
+are my favorite a zestful food is the hot cross bun
+
+_Bing (azure)_
+
+Not checked.
+
+_Houndify speech_
+
+the stale smell of old beer lingers it takes heat to bring out the odor a cold
+dip restores health and zest a salt pickle taste fine with ham tacos al pastor
+are my favorite aceste full food is the hot cross bun
+
+_IBM speech_
+
+Not checked.
+
+
 # References
 
 * https://github.com/lorgiorepo/python-speech-recognition
@@ -58,5 +99,6 @@ plackup -MPlack::App::Directory -e 'Plack::App::Directory->new(root=>".");' -p 2
 
 * https://github.com/jiaaro/pydub/issues/169
 
+[Harvard]: https://www.cs.columbia.edu/~hgs/audio/harvard.html
 [pydub]: https://pypi.org/project/pydub/
 [SpeechRecognition]: https://pypi.org/project/SpeechRecognition/

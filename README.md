@@ -5,6 +5,7 @@ Audio transcribing using Python's [SpeechRecognition] library
 # Synopsis
 
 ```sh
+docker run -it --rm -v $(pwd)/test.wav:/opt/tokenize-and-transcribe/samples/harvard.wav speech
 ```
 
 # Description
@@ -94,6 +95,7 @@ Not checked.
 * https://stackoverflow.com/questions/36458214/split-speech-audio-file-on-words-in-python/36461422
 * https://stackoverflow.com/questions/45526996/split-audio-files-using-silence-detection
 * https://www.alexkras.com/transcribing-audio-file-to-text-with-google-cloud-speech-api-and-python/
+* https://github.com/MoltenMuffins/IndoorAudioClassifier/blob/master/split_audio_files.py
 
 ## Issues
 

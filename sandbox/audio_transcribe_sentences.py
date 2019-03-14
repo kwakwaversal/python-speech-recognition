@@ -8,7 +8,7 @@ from os import path
 AUDIO_FILE = path.join(path.dirname(path.realpath(__file__)), "harvard.wav")
 
 from pydub import AudioSegment
-from pydub.silence import split_on_silence, detect_nonsilent
+from pydub.silence import split_on_silence, detect_nonsilent, detect_silence
 
 # https://github.com/jiaaro/pydub/issues/154
 def split_on_silencio(audio_segment, min_silence_len=1000, silence_thresh=-16, keep_silence=100):
@@ -36,30 +36,34 @@ def split_on_silencio(audio_segment, min_silence_len=1000, silence_thresh=-16, k
     return chunks
 
 sound_file = AudioSegment.from_wav(AUDIO_FILE)
-audio_chunks = split_on_silence(sound_file, 
-    # must be silent for at least half a second
-    min_silence_len=500,
+# audio_chunks = split_on_silence(sound_file, 
+#     # must be silent for at least half a second
+#     min_silence_len=500,
 
-    # consider it silent if quieter than -16 dBFS
-    silence_thresh=-16,
+#     # consider it silent if quieter than -16 dBFS
+#     silence_thresh=-16,
 
-    keep_silence=250
-)
+#     keep_silence=250
+# )
 
-for i, chunk in enumerate(audio_chunks):
+silent_ranges = detect_silence(sound_file, min_silence_len=500, silence_thresh=-26, seek_step=10)
+
+for start_i, end_i in silent_ranges:
+    print("start ", start_i, " end ", end_i)
+
+for i in range(len(silent_ranges)):
+    if i == 0:
+        chunk = sound_file[0:silent_ranges[i][1]]
+    elif i == (len(silent_ranges) - 1):
+        chunk = sound_file[0:silent_ranges[i][1]:]
+    else:
+        chunk = sound_file[silent_ranges[i-1][1]:silent_ranges[i][1]]
+
     out_file = "splitaudio/chunk{0}.wav".format(i)
     print("exporting", out_file)
     chunk.export(out_file, format="wav")
-
-# # use the audio file as the audio source
-# r = sr.Recognizer()
-# with sr.AudioFile(AUDIO_FILE) as source:
-#     audio = r.record(source)  # read the entire audio file
-
-# # recognize speech using Sphinx
-# try:
-#     print("Sphinx thinks you said " + r.recognize_sphinx(audio))
-# except sr.UnknownValueError:
-#     print("Sphinx could not understand audio")
-# except sr.RequestError as e:
-#     print("Sphinx error; {0}".format(e))
+    
+# for i, chunk in enumerate(audio_chunks):
+#     out_file = "splitaudio/chunk{0}.wav".format(i)
+#     print("exporting", out_file)
+#     chunk.export(out_file, format="wav")

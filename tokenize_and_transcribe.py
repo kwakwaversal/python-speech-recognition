@@ -15,22 +15,23 @@ enough metadata to be useful and sentiment analysis from `textblob`.
 
 """
 
-import os
 import json
 import speech_recognition as sr
 import sys
+import tempfile
+import urllib.request
 from auditok import ADSFactory, AudioEnergyValidator, StreamTokenizer
 from pathlib import Path
 from pydub import AudioSegment
 from textblob import TextBlob
 
-def transcribe_audio(file):
+def transcribe_audio(file, unpackdir):
     path = Path(file)
 
     tempsound = AudioSegment.from_wav(file)
     tempsound = tempsound.set_channels(1)
-    tempsound.export('0wavtmp_'+path.name, format="wav")
-    tmpfile = '0wavtmp_'+path.name
+    tmpfile = "{}/0wavtmp_{}".format(unpackdir, path.name)
+    tempsound.export(tmpfile, format="wav")
 
     # We set the `record` argument to True so that we can rewind the source
     asource = ADSFactory.ads(filename=tmpfile, record=True)
@@ -56,7 +57,7 @@ def transcribe_audio(file):
         newAudio = AudioSegment.from_wav(file)
         newAudio = newAudio[t[1] * 10:t[2] * 10] 
 
-        chunk_name = "{}_clip{}.wav".format(path.stem,index)
+        chunk_name = "{}/{}_clip{}.wav".format(unpackdir, path.stem, index)
         # print("Generating", chunk_name)
         newAudio.export(chunk_name, format="wav")
         with sr.AudioFile(chunk_name) as source:
@@ -82,13 +83,21 @@ def transcribe_audio(file):
             }
         })
 
-    print(json.dumps(json_output))
-
-    os.remove(tmpfile)
+    return json_output
 
 if len(sys.argv) < 2:
     print("You failed to provide a filename to tokenize")
     sys.exit(1)
 
-filename=sys.argv[1]
-transcribe_audio(filename) 
+# uri handles different schemes (http, file etc.)
+uri = sys.argv[1]
+
+# tempdir is cleaned up after the program exits
+tempdir = tempfile.TemporaryDirectory()
+
+filename = "{}/audio.wav".format(tempdir.name)
+urllib.request.urlretrieve(uri, filename)
+
+# outputs
+transcription = transcribe_audio(filename, tempdir.name)
+print(json.dumps(transcription))

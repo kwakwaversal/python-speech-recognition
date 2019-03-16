@@ -1,11 +1,16 @@
-google-api-python-client
-oauth2client
-PocketSphinx
-pathlib
-pydub
-SpeechRecognition
-textblob
-
 # audio tokenizing
 auditok
 pyaudio
+pydub
+
+# sentiment analysis
+textblob
+
+# speech recognition
+PocketSphinx
+SpeechRecognition
+# google-api-python-client
+# oauth2client
+
+# general
+pathlib

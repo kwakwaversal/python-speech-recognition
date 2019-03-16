@@ -4,16 +4,20 @@ MAINTAINER Paul Williams <kwakwaversal@gmail.com>
 
 WORKDIR /opt/tokenize-and-transcribe
 
-COPY requirements.txt ./
-RUN apt-get -y update && apt-get -y install build-essential \
-    libpulse-dev \
-    swig \
-    libasound2-dev \
-    ffmpeg
+# build tools
+RUN apt-get -y update && apt-get -y install build-essential
 
 # auditok
 RUN apt-get -y install portaudio19-dev
 
+# PockerSphinx
+RUN apt-get -y install swig libpulse-dev
+
+# pydub
+RUN apt-get -y install ffmpeg
+
+# install packages
+COPY requirements.txt ./
 RUN pip install --no-cache-dir -r requirements.txt
 
 COPY . .

@@ -55,7 +55,7 @@ def transcribe_audio(file, unpackdir):
     for index,t in enumerate(tokens):
         # print("Token starts at {0} and ends at {1}".format(t[1] * 10, t[2] * 10))
         newAudio = AudioSegment.from_wav(file)
-        newAudio = newAudio[t[1] * 10:t[2] * 10] 
+        newAudio = newAudio[t[1] * 10:t[2] * 10]
 
         chunk_name = "{}/{}_clip{}.wav".format(unpackdir, path.stem, index)
         # print("Generating", chunk_name)
@@ -63,25 +63,39 @@ def transcribe_audio(file, unpackdir):
         with sr.AudioFile(chunk_name) as source:
             audio = r.record(source)
 
+        transcription = {
+            "start": t[1] * 10,
+            "end": t[2] * 10
+        }
+
         # recognize speech using Sphinx
         try:
-            transcription = r.recognize_sphinx(audio)
+            transcription["text"] = r.recognize_sphinx(audio)
         except sr.UnknownValueError:
-            print("Sphinx could not understand audio")
+            transcription["text"] = "<could not transcribe>"
+            transcription["error"] = True
+            sys.stderr.write("Sphinx could not understand audio")
         except sr.RequestError as e:
-            print("Sphinx error; {0}".format(e))
+            sys.stderr.write("Sphinx error; {0}".format(e))
 
-        tb = TextBlob(transcription)
+        tb = TextBlob(transcription["text"])
+        transcription["sentiment"] = {
+            "polatirty": tb.polarity,
+            "subjectivity": tb.subjectivity
+        }
 
-        json_output['segments'].append({
-            "start": t[1] * 10,
-            "end": t[2] * 10,
-            "transcription": transcription,
-            "sentiment": {
-                "polatirty": tb.polarity,
-                "subjectivity": tb.subjectivity
-            }
-        })
+        json_output["segments"].append(transcription)
+
+        # json_output['segments'].append({
+        #     "start": t[1] * 10,
+        #     "end": t[2] * 10,
+        #     "transcription": transcription,
+        #     "transcription_error": transcription_error,
+        #     "sentiment": {
+        #         "polatirty": tb.polarity,
+        #         "subjectivity": tb.subjectivity
+        #     }
+        # })
 
     return json_output
 

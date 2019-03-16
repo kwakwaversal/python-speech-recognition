@@ -5,13 +5,17 @@ Audio transcribing using Python's [SpeechRecognition] library
 # Synopsis
 
 ```sh
-docker run -it --rm -v $(pwd)/test.wav:/opt/tokenize-and-transcribe/samples/harvard.wav speech
+docker build . -t speech
+
+docker run -it --rm -v $(pwd):/tmp/speech speech file:///tmp/speech/samples/harvard.wav
+
+docker run -it --rm speech https://www.voiptroubleshooter.com/open_speech/american/OSR_us_000_0010_8k.wav
 ```
 
 # Description
 
 This is my first attempt to transcribe audio files using [SpeechRecognition]
-and hopefully guesstimate sentences using [pydub].
+and guesstimate sentences using [auditok].
 
 It's inherently hard to take a full audio recording of varying length,
 accurately convert it to text in fully formed sentences, and provide meta data
@@ -88,7 +92,6 @@ _IBM speech_
 
 Not checked.
 
-
 # References
 
 * https://github.com/lorgiorepo/python-speech-recognition
@@ -101,6 +104,7 @@ Not checked.
 
 * https://github.com/jiaaro/pydub/issues/169
 
+[auditok]: https://github.com/amsehili/auditok
 [Harvard]: https://www.cs.columbia.edu/~hgs/audio/harvard.html
 [pydub]: https://pypi.org/project/pydub/
 [SpeechRecognition]: https://pypi.org/project/SpeechRecognition/

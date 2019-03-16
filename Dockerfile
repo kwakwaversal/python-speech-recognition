@@ -22,4 +22,5 @@ RUN pip install --no-cache-dir -r requirements.txt
 
 COPY . .
 
-CMD ["python3", "./tokenize_and_transcribe.py", "samples/harvard.wav"]
+#CMD ["python3", "./tokenize_and_transcribe.py", "samples/harvard.wav"]
+ENTRYPOINT ["python3", "./tokenize_and_transcribe.py"]

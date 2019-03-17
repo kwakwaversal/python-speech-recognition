@@ -14,3 +14,7 @@ SpeechRecognition
 
 # general
 pathlib
+
+# backporting python3 to python2
+backports.tempfile
+six

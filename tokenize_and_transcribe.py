@@ -1,4 +1,4 @@
-#!/usr/bin/env python3
+#!/usr/bin/env python
 
 """transcribe audio segments
 
@@ -18,11 +18,11 @@ enough metadata to be useful and sentiment analysis from `textblob`.
 import json
 import speech_recognition as sr
 import sys
-import tempfile
-import urllib.request
 from auditok import ADSFactory, AudioEnergyValidator, StreamTokenizer
+from backports import tempfile
 from pathlib import Path
 from pydub import AudioSegment
+from six.moves import urllib
 from textblob import TextBlob
 
 def transcribe_audio(file, unpackdir):

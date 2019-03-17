@@ -1,1 +1,3 @@
-splitaudio
+infrastructure/fpm/build
+*.deb
+*.rpm

@@ -1,0 +1,5 @@
+#! /usr/bin/env bash
+set -e
+
+find /usr/share/python/tokandtran/lib -iname *.pyc -exec rm {} \;
+find /usr/share/python/tokandtran/lib -iname *.pyo -exec rm {} \;

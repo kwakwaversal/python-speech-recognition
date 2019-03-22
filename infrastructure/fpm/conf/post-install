@@ -1,0 +1,14 @@
+#! /usr/bin/env bash
+
+set -e
+
+pythonver=$(python --version 2>&1 | awk -F'.' '{print $1}')
+
+# Create bytecode
+if [[ x$pythonver == 'xPython 2' ]]; then
+    python -m compileall /usr/share/python/tokandtran/lib > /dev/null || true
+    python -O -m compileall /usr/share/python/tokandtran/lib > /dev/null || true
+else
+    python -m compileall /usr/share/python/tokandtran/lib > /dev/null
+    python -O -m compileall /usr/share/python/tokandtran/lib > /dev/null
+fi
